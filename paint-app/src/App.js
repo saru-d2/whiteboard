@@ -13,6 +13,7 @@ function App() {
   const [lineOpacity, setLineOpacity] = useState(0.1);
   const [files, setFiles] = useState(null)
   const [pageNo, setPageNo] = useState(1)
+  const [toMute, setMute] = useState(' ')
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: "pdf/*",
@@ -121,8 +122,19 @@ function App() {
     })
   }
 
+  const handleSubmitMute = (e) => {
+    console.log(toMute);
+    axios.post('http://localhost:4000/setMute', {toMute: toMute}).then(res => {
+      console.log(res)
+    })
+  }
+
   const handleChange = (e) => {
     setPageNo(e.target.value)
+  }
+
+  const handleChangeMute = (e) => {
+    setMute(e.target.value)
   }
 
   return (
@@ -143,19 +155,26 @@ function App() {
           width={`1280px`}
           height={`720px`}
         />
-        <button onClick={saveToBackend}> save
-        </button>
 
         <div {...getRootProps()}>
           <input {...getInputProps()} />
           {dropzoneText()}
         </div>
           <label>
-            Name:
+            page No:
             <input type="text" value={pageNo} onChange={handleChange} />
           </label>
           <input type="button" value="apply" onClick={handleSubmit} />
+
+          <label>
+            to mute:
+            <input type="text" value={toMute} onChange={handleChangeMute} />
+          </label>
+          <input type="button" value="apply" onClick={handleSubmitMute} />
+
       </div>
+
+      
     </div>
   );
 }
